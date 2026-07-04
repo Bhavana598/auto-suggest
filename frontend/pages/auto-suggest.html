@@ -35,11 +35,17 @@
             width:40%;
         } 
         #suggestion-box{
-            border: 1px solid black;
-            border-radius: 30px;
-            margin-left: 29%;
+           /*0 border: 1px solid gray;
+            border-radius: 10px;*/
+            
+            margin-left: 26%;
             padding: 15px 15px 15px 45px;
             width: 40%;
+        }
+        #suggestion-item{
+           border: 1px solid gray;
+            padding: 10px;
+            border-radius:10px;
         }
     </style>
 </head>
@@ -53,11 +59,47 @@
     <p class="tag-line">One million phrases. Four algorithms. Prefix Based Auto Suggest</p>
     <span>
         <span class="lens">&#128269;</span>
-        <input class="search-box" placeholder="Search here...">
+        <input type="text" class="search-box" id="search-box" placeholder="Search here...">
     </span>
     <div id="suggestion-box">
-       suggestion box
+       <!-- suggestion box -->
     </div>
     </div>
+    <script>
+        var searchBox=document.getElementById("search-box");
+        var suggestionBox=document.getElementById("suggestion-box");
+        searchBox.addEventListener("input",function(){
+            //1.get user typed text
+            var userInput=searchBox.value;
+            if(userInput.trim()==""){
+
+            }else{
+                var url1=" https://autosuggest-backend.onrender.com/api/autosuggest?q=";
+                var url3="&algorithm=brute&limit=10&weighted=false"
+                var url=url1+userInput+url3;
+                 //2.make api call to get suggestions
+
+                 fetch(url).
+                 then(function(response){
+                    return response.json();
+                 })
+                 .then(function(data){
+                    console.log(data);
+                    //3.display data in html
+                    var resultsArray=data.results;
+                    
+                    var htmlResults="";
+                    for(var i=0;i<resultsArray.length;i++){
+                        htmlResults+="<div id='suggestion-item'>"+resultsArray[i].text+"</div>";
+                    }
+                    suggestionBox.innerHTML=htmlResults;
+                 })
+            }
+           
+
+            
+
+        })
+    </script>
 </body>
 </html>
